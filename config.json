@@ -1,0 +1,9 @@
+{
+    "port": 10000,
+    "log": "DEBUG",
+    "bin": "{cwd}/bin",
+    "pages": {
+        "en": "uniboot/pages/en.html",
+        "ru": "uniboot/pages/ru.html"
+    }
+}
