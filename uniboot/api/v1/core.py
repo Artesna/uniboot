@@ -1,7 +1,9 @@
 import os
 import asyncio
-import tempfile
+import random
 import shutil
+import string
+import tempfile
 import aiofiles
 from aiohttp import web
 
@@ -67,8 +69,21 @@ async def post_api_v1_patch(request: web.Request):
 
     # Patch fastbootd with different methods
     for method in [
-        ("ff8302d1fd7b04a9fb2b00f9fa6706a9", "00008052c0035fd6fb2b00f9fa6706a9"),  # Realme C21Y (ARM64)
-        ("15f05cef2de9f04389b03c4800247844d0f80080d8f80000", "15f05cef2de9f0430020bde8f0837844d0f80080d8f80000")  # Realme C30 (ARM)
+        # Realme C21Y (ARM64)
+        (
+            "ff8302d1fd7b04a9fb2b00f9fa6706a9",  # Original
+            "00008052c0035fd6fb2b00f9fa6706a9"   # Modified
+        ),
+        # Realme C30 (ARM)
+        (
+            "15f05cef2de9f04389b03c4800247844d0f80080d8f80000",  # Original
+            "15f05cef2de9f0430020bde8f0837844d0f80080d8f80000"   # Modified
+        ),
+        # Realme C11 (2021) (ARM)
+        (
+            "2de9f04389b0394800247844d0f80080",  # Original
+            "2de9f0430020bde8f0437844d0f80080"   # Modified
+        )
     ]:
         try:
             await (await asyncio.create_subprocess_exec(
@@ -135,9 +150,12 @@ async def post_api_v1_patch(request: web.Request):
         shutil.rmtree(temp)
         return web.json_response({"status": "error", "message": "Unknown error occurred"}, status=500)
 
+    # Create random id (like Magisk does)
+    random_id = "".join(random.choice(string.ascii_lowercase + string.ascii_uppercase + string.digits) for _ in range(5))
+
     # Create response with patched boot.img
     async with aiofiles.open(temp + "/uniboot.img", "rb") as f:
-        response = web.Response(body=await f.read(), headers={"Content-Disposition": "filename=uniboot.img"})
+        response = web.Response(body=await f.read(), headers={"Content-Disposition": f"filename=uniboot_{random_id}.img"})
 
     # Cleanup
     shutil.rmtree(temp)
