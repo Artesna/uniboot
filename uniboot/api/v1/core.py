@@ -78,18 +78,23 @@ async def post_api_v1_patch(request: web.Request):
         # Realme C21Y (ARM64)
         (
             "ff8302d1fd7b04a9fb2b00f9fa6706a9",  # Original
-            "00008052c0035fd6fb2b00f9fa6706a9"   # Modified
+            "00008052c0035fd6fb2b00f9fa6706a9",  # Modified
         ),
         # Realme C30 (ARM)
         (
-            "15f05cef2de9f04389b03c4800247844d0f80080d8f80000",  # Original
-            "15f05cef2de9f0430020bde8f0837844d0f80080d8f80000"   # Modified
+            "89b03c4800247844d0f80080d8f80000",  # Original
+            "0020bde8f0837844d0f80080d8f80000",  # Modified
         ),
         # Realme C11 (2021) (ARM)
         (
-            "2de9f04389b0394800247844d0f80080",  # Original
-            "2de9f0430020bde8f0437844d0f80080"   # Modified
-        )
+            "89b0394800247844d0f80080d8f80000",  # Original
+            "0020bde8f0837844d0f80080d8f80000",  # Modified
+        ),
+        # Some Huawei (ARM)
+        (
+            "89b03a4800247844d0f80080d8f80000",  # Original
+            "0020bde8f0837844d0f80080d8f80000",  # Modified
+        ),
     ]:
         try:
             await (await asyncio.create_subprocess_exec(
